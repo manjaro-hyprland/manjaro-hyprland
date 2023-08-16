@@ -1,0 +1,12 @@
+*.iso
+manjaro-tools
+pkg-cache
+iso-profiles
+iso
+docs/manjaro-hyprland/*
+docs/assets.json
+docs/release.json
+manjaro-full.zip
+docs/node_modules
+docs/_site
+docs/.wrangler

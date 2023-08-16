@@ -1,0 +1,85 @@
+name: iso build
+on:
+  schedule:
+    - cron:  '30 2 * * 0'
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+    - iso_profile_update
+
+concurrency: 
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: styfle/cancel-workflow-action@b173b6ec0100793626c2d9e6b90435061f4fc3e5 # tag=0.11.0
+        with:
+          access_token: ${{ github.token }}
+      - id: time
+        uses: boredland/get-time-action@dbc808befb89eb33fee64f5f4abce4d2a5fa7cfd # tag=2.0.0
+        with:
+          format: 'YYYYMMDDHHmm'
+      - id: receive
+        uses: boredland/kernel-info@main
+    outputs:
+      release_tag: ${{ steps.time.outputs.time }}
+      longterm: ${{ steps.receive.outputs.longterm-pkg }}
+      stable: ${{ steps.receive.outputs.stable-pkg }}
+  build-release:
+    runs-on: ubuntu-22.04
+    needs: [prepare-release]
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        edition: [hyprland]
+        branch: [stable]
+        scope: [full]
+        experimental: [false]
+        kernel: 
+          - ${{ needs.prepare-release.outputs.longterm }}
+        include:
+          - edition: hyprland
+            branch: unstable
+            scope: full
+            kernel: ${{ needs.prepare-release.outputs.stable }}
+            experimental: true
+    steps:
+      - uses: styfle/cancel-workflow-action@b173b6ec0100793626c2d9e6b90435061f4fc3e5 # tag=0.11.0
+        with:
+          access_token: ${{ github.token }}
+      - name: import hyprland key
+        run: gpg --keyserver keys.openpgp.org --receive-keys ${{ vars.GPG_KEYID }}
+      - name: image-build-upload
+        uses: Manjaro/manjaro-iso-action@main
+        with:
+          iso-profiles-repo: https://github.com/Manjaro-Hyprland/iso-profiles
+          edition: ${{ matrix.edition }}
+          branch: ${{ matrix.branch }}
+          scope: ${{ matrix.scope }}
+          kernel: ${{ matrix.kernel }}
+          release-tag: ${{ needs.prepare-release.outputs.release_tag }}
+          additional-trusted-gpg: ${{ vars.GPG_KEYID }}
+  trigger-mirror:
+    runs-on: ubuntu-22.04
+    needs: [build-release]
+    steps:
+      - uses: peter-evans/repository-dispatch@26b39ed245ab8f31526069329e112ab2fb224588 # v2
+        with:
+          token: ${{ secrets.DISPATCH_TOKEN }}
+          repository: manjaro-hyprland/manjaro-hyprland
+          event-type: new_release
+  rollback:
+    runs-on: ubuntu-22.04
+    needs: [build-release]
+    if: ${{ failure() || cancelled() }}
+    steps:
+      - name: rollback
+        run: |
+          echo ${{ github.token }} | gh auth login --with-token
+          ASSET_COUNT=$(gh release view ${{ needs.prepare-release.outputs.release_tag }} --json "assets" --jq '.assets | length')
+          if [ "$ASSET_COUNT" -gt "2" ]; then exit 0;fi
+          gh release delete ${{ needs.prepare-release.outputs.release_tag }} -y --repo ${{ github.repository }}
+          git push --delete origin ${{ needs.prepare-release.outputs.release_tag }}

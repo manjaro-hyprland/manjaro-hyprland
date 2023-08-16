@@ -1,0 +1,25 @@
+{
+  "name": "manjaro-downloads",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18"
+  },
+  "author": {
+    "email": "info@jonas-strassel.de",
+    "name": "Jonas Strassel",
+    "url": "https://jonas-strassel.de"
+  },
+  "license": "MIT",
+  "scripts": {
+    "db:up": "wrangler d1 execute VISITOR_COUNT_STORE --file=./schema.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20221111.1",
+    "typescript": "^5.0.0",
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "@octokit/auth-token": "^4.0.0",
+    "@octokit/rest": "^20.0.0"
+  }
+}

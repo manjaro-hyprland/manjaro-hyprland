@@ -1,0 +1,12 @@
+---
+layout: default
+description: Experience a smooth and efficient desktop experience with Manjaro Hyprland - a Linux operating system that utilizes the power of the Hyprland tiling window manager. Designed for advanced users and developers.
+---
+
+{% for asset in site.data.release %}
+<div class="link">
+  <a href="{{ asset.url }}" alt="{{ asset.name }}"
+    >{{ asset.name }} <i>{{ asset.size | filesize }}</i></a
+  >
+</div>
+{% endfor %}

@@ -1,0 +1,25 @@
+title: Manjaro Hyprland Edition
+email: info@manjaro-hyprland.download
+url: "https://manjaro-hyprland.download"
+
+remote_theme: manjaro-hyprland/manjaro-hyprland
+
+plugins:
+  - jekyll-get-json
+  - jekyll-webp
+  - jekyll-remote-theme
+
+webp:
+  enabled: true
+  formats: [".jpeg", ".jpg", ".png", ".tiff"]
+
+jekyll_get_json:
+  - data: release
+    json: 'https://mirror.manjaro-hyprland.download/manjaro-hyprland/release.json'
+
+exclude:
+  - node_modules/
+  - '*.json'
+  - yarn.lock
+  - '*.ts'
+  - functions/
