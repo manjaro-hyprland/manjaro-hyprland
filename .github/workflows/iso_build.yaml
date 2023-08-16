@@ -56,12 +56,12 @@ jobs:
         uses: Manjaro/manjaro-iso-action@main
         with:
           iso-profiles-repo: https://github.com/Manjaro-Hyprland/iso-profiles
-          edition: ${{ matrix.edition }}
+          edition: juck${{ matrix.edition }}
           branch: ${{ matrix.branch }}
           scope: ${{ matrix.scope }}
           kernel: ${{ matrix.kernel }}
           release-tag: ${{ needs.prepare-release.outputs.release_tag }}
-          # additional-trusted-gpg: ${{ vars.GPG_KEYID }}
+          additional-trusted-gpg: ${{ vars.GPG_KEYID }}
   trigger-mirror:
     runs-on: ubuntu-22.04
     needs: [build-release]
