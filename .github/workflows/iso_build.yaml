@@ -51,6 +51,8 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - name: import hyprland key
+        run: |
+          gpg --keyserver keys.openpgp.org --receive-keys 8D8E31AFC32428A6
         run: gpg --keyserver keys.openpgp.org --receive-keys ${{ vars.GPG_KEYID }}
       - name: image-build-upload
         uses: Manjaro/manjaro-iso-action@main
@@ -61,9 +63,10 @@ jobs:
           scope: ${{ matrix.scope }}
           kernel: ${{ matrix.kernel }}
           release-tag: ${{ needs.prepare-release.outputs.release_tag }}
-          additional-trusted-gpg: >
-            8D8E31AFC32428A6
-            8D8E31AFC32428A6
+          additional-trusted-gpg: 8D8E31AFC32428A6
+          # additional-trusted-gpg: >
+          #   8D8E31AFC32428A6
+          #   8D8E31AFC32428A6
   trigger-mirror:
     runs-on: ubuntu-22.04
     needs: [build-release]
