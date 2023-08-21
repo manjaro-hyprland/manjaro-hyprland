@@ -53,7 +53,7 @@ jobs:
       - name: import hyprland key
         run: |
           gpg --keyserver keys.openpgp.org --receive-keys 8D8E31AFC32428A6
-        run: gpg --keyserver keys.openpgp.org --receive-keys ${{ vars.GPG_KEYID }}
+        # run: gpg --keyserver keys.openpgp.org --receive-keys ${{ vars.GPG_KEYID }}
       - name: image-build-upload
         uses: Manjaro/manjaro-iso-action@main
         with:
