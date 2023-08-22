@@ -1,6 +1,6 @@
 import { countUp, Env } from "../utils";
 
-const hostname = "mirror.manjaro-hyprland.download";
+const hostname = "mirror.manjaro-hyprland.timesavior.io";
 
 export const onRequest: PagesFunction<Env> = async (context) => {
     const url = new URL(context.request.url);

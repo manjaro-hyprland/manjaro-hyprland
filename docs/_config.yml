@@ -1,6 +1,6 @@
 title: Manjaro Hyprland Edition
-email: info@manjaro-hyprland.download
-url: "https://manjaro-hyprland.download"
+email: info@manjaro-hyprland.timesavior.io
+url: "https://manjaro-hyprland.timesavior.io"
 
 remote_theme: manjaro-hyprland/manjaro-hyprland
 
@@ -15,7 +15,7 @@ webp:
 
 jekyll_get_json:
   - data: release
-    json: 'https://mirror.manjaro-hyprland.download/manjaro-hyprland/release.json'
+    json: 'https://mirror.manjaro-hyprland.timesavior.io/manjaro-hyprland/release.json'
 
 exclude:
   - node_modules/

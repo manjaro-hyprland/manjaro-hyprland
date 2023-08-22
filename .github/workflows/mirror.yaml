@@ -17,7 +17,7 @@ jobs:
   pages:
     environment:
       name: mirror
-      url: https://mirror.manjaro-hyprland.download/manjaro-hyprland/release.json
+      url: https://mirror.manjaro-hyprland.timesavior.io/manjaro-hyprland/release.json
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
@@ -48,7 +48,7 @@ jobs:
       id: files
       run: |
         (cd $download_dir && ls -l *iso*) | \
-          jq --compact-output -s -R 'split("\n") | [.[] | select(length > 0) | split(" ") | [.[] | select(. == "" | not)] | { size: .[4] | tonumber, name: .[-1], url: "https://manjaro-hyprland.download/download?file=\(.[-1])" }]' \
+          jq --compact-output -s -R 'split("\n") | [.[] | select(length > 0) | split(" ") | [.[] | select(. == "" | not)] | { size: .[4] | tonumber, name: .[-1], url: "https://manjaro-hyprland.timesavior.io/download?file=\(.[-1])" }]' \
           > $download_dir/release.json
     - name: s3 sync downloads
       uses: jakejarvis/s3-sync-action@master
