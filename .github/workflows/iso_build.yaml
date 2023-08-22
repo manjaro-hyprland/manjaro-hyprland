@@ -23,7 +23,7 @@ jobs:
         with:
           format: 'YYYYMMDDHHmm'
       - id: receive
-        uses: boredland/kernel-info@main
+        uses: manjaro-hyprland/kernel-info@main
     outputs:
       release_tag: ${{ steps.time.outputs.time }}
       longterm: ${{ steps.receive.outputs.longterm-pkg }}
