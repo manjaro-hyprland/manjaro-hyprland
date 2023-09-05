@@ -51,7 +51,10 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - name: import hyprland key
-        run: gpg --keyserver keys.openpgp.org --receive-keys ${{ vars.GPG_KEYID }}
+        run: |
+          gpg --keyserver keys.openpgp.org --receive-keys ${{ vars.GPG_KEYID }}
+          sudo pacman-key --keyserver keys.openpgp.org --recv-key 87CF646997D0A779
+          sudo pacman-key --lsign-key 87CF646997D0A779
       - name: image-build-upload
         uses: Manjaro/manjaro-iso-action@main
         with:
